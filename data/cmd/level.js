@@ -2,7 +2,7 @@ const Discord = require("discord.js");
 const fs = require('fs');
 let xp = require("../xp.json")
 const cfg = require("../cfg.js")
-const mentionHook = new Discord.WebhookClient('505790095115288578', '1-h2jm1ceZKPhmnEpbR0sIWXnYs1Sw_baBWzX1EiRHnb4SkzHxylULL8uOQWgwwE_dUA');
+const mentionHook = cfg.webhook;
 
 module.exports.run = async (bot, message, args) => {
 
