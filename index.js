@@ -1,14 +1,18 @@
 const Discord = require("discord.js");
 const bot = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
-let xp = require("./data/xp.json");
+let xp = require("./data/jsons/xp.json");
 const cfg = require("./data/cfg.js");
 const tokenfile = cfg.token;
-let currency = require("./data/currency.json");
+let currency = require("./data/jsons/currency.json");
 const prefix = cfg.prefix;
 bot.commands = new Discord.Collection();
 const mentionHook = cfg.webhook;
+let inv = require("./data/jsons/inventory.json");
+let invusers = require("./data/jsons/invusers.json");
 
+//BEGIN
+//FS.READDIR (ЧИТАЕТ КОМАНДЫ.)
 
 fs.readdir("./data/cmd/", (err, files) => {
 
@@ -26,6 +30,12 @@ fs.readdir("./data/cmd/", (err, files) => {
     });
   });
 
+//
+//
+//INTERVAL BOT.SETACTIVITY
+//
+//
+
   bot.on("ready", async () => {
 
       console.log(`${bot.user.username} онлайн на ${bot.guilds.size} серверах`);
@@ -39,7 +49,13 @@ fs.readdir("./data/cmd/", (err, files) => {
 
     });
 
-    //with ${bot.guilds.size} servers}
+    //with ${bot.guilds.size} servers} //пометка
+
+//
+//
+//BASE CMD HELP
+//
+//
 
 bot.on("message", async message => {
 
@@ -73,6 +89,12 @@ bot.on("message", async message => {
 
 });
 
+//
+//
+//XP
+//
+//
+
 bot.on("message", async message => {
   if(!xp[message.author.id]){
    xp[message.author.id] = {
@@ -91,11 +113,17 @@ bot.on("message", async message => {
   let xpAdd = Math.floor(Math.random() * 0) + 0;
         console.log(xpAdd);
 
-  fs.writeFile("./data/xp.json", JSON.stringify(xp), (err) => {
+  fs.writeFile("./data/jsons/xp.json", JSON.stringify(xp), (err) => {
     if(err) console.log(err)
       })
 
 });
+
+//
+//
+//GUILD CREATE AND GUILD DELETE
+//
+//
 
 bot.on("guildCreate", guild => {
   const cembed = new Discord.RichEmbed()
@@ -119,6 +147,12 @@ bot.on("guildDelete", guild => {
   mentionHook.send(cembed);
 });
 
+//
+//
+//CURRENCY
+//
+//
+
 bot.on("message", async message => {
   if(message.content === `${prefix}currency`) {
   if(!currency[message.author.id]){
@@ -137,7 +171,7 @@ const embed = new Discord.RichEmbed()
 .addField("Счет", curcur + "<:rublik:481212898279161866>")
 .setFooter(`Запрос от ${message.author.username}`);
 
-fs.writeFile("./data/currency.json", JSON.stringify(currency), (err) => {
+fs.writeFile("./data/jsons/currency.json", JSON.stringify(currency), (err) => {
       if(err) console.log(err)
     });
 
@@ -155,5 +189,44 @@ fs.writeFile("./data/currency.json", JSON.stringify(currency), (err) => {
 
 });
 
+//
+//
+//INVENTORY
+//
+//
+
+bot.on("message", async message => {
+  if(!inv[message.author.id]){
+   inv[message.author.id] = {
+     inv: 0,
+  };
+}
+
+fs.writeFile("./data/jsons/invusers.json", JSON.stringify(inv), (err) => {
+  if(err) console.log(err)
+    })
+
+  var invuser = inv[message.author.id].inv;
+
+  if(message.content === `${prefix}inventory`) {
+    if(invuser = "0") {
+      message.reply("у тебя ничего нет.")
+    }
+  if(invuser = "0") {
+  const embed = new Discord.RichEmbed()
+  .setAuthor(`Инвентарь ${message.author.username}`, message.author.displayAvatarURL)
+  .setColor("#33CCFF")
+  .addField("Инвентарь:", invuser)
+  .setFooter(`Вещи можно получить убивая боссов.`);
+    message.channel.send(embed)
+    }
+  }
+});
+
+//
+//
+//
+//
+//
 
 bot.login(tokenfile)
