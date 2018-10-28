@@ -1,9 +1,9 @@
 const Discord = require("discord.js");
-const tokenfile = "NTAxNDA5MzYzOTYxODM5NjI3.DqY9_Q.3N8VD_L0ij0Cz8Y5GVPo8BcsxoE"
 const bot = new Discord.Client({disableEveryone: true});
 const fs = require('fs');
 let xp = require("./data/xp.json");
 const cfg = require("./data/cfg.js");
+const tokenfile = cfg.token;
 let currency = require("./data/currency.json");
 const prefix = cfg.prefix;
 bot.commands = new Discord.Collection();
