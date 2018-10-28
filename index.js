@@ -30,15 +30,11 @@ fs.readdir("./data/cmd/", (err, files) => {
 
       console.log(`${bot.user.username} онлайн на ${bot.guilds.size} серверах`);
       var botsetactivity = setInterval(function() {
-        var botactivity = Math.floor(Math.random() * 2) == 0 ? "1" : "0"
-        console.log(`botactivity: ${botactivity}`)
-      if (botactivity = "1") {
         bot.user.setActivity(`r.help`, {type: "WATCHING"})
-          }
-      if (botactivity = "0") {
-        bot.user.setActivity(`голосовые каналы на ${bot.guilds.size} сервере(ах)`, {type: "LISTENING"})
-          }
-      }, 30000);
+		setTimeout(function() {
+		bot.user.setActivity(`голосовые каналы на ${bot.guilds.size} сервере(ах)`, {type: "LISTENING"})
+		}, 30000);
+      }, 60000);
 
 
     });
